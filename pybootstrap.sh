@@ -67,4 +67,8 @@ install_dependencies() {
     unset IFS
 }
 
-install_dependencies
+if [ -f "requirements.txt" ] || [ -f "dev-requirements.txt" ]; then
+    echo "Installing requirements..."
+    install_dependencies
+fi
+
