@@ -21,8 +21,8 @@ _EOF_
 
 get_args() {
     local OPTIND
-    opt_d=0
-    opt_f=0
+    dash_d=0
+    dash_f=0
     while getopts "dfh" opt; do
       case $opt in
         h)
@@ -30,10 +30,10 @@ get_args() {
           return 0
           ;;
         d)
-          opt_d=1
+          dash_d=1
           ;;
         f)
-          opt_f=1
+          dash_f=1
           ;;
         \?)
           ;;
@@ -48,21 +48,23 @@ get_args $@
 
 # Build install command string
 install_dependencies() {
-    local install_cmd
-
+    IFS="%"  # Preserve whitespace in variables by changing inter field separator
     install_cmd="./env/bin/pip install -i http://pypi.digi.com/simple"
-    if [ $opt_f -eq 1 ]; then
-        install_cmd=$(printf "%s --force-reinstall" $install_cmd)
+    if [ $dash_f -eq 1 ]; then
+        # reinstall packages
+        install_cmd=$(printf "%s --force-reinstall" $install_cmd )
     fi
 
-    if [ $opt_d -eq 1 ]; then
-        install_cmd=$(printf "%s -r dev-requirements.txt" $install_cmd)
+    if [ $dash_d -eq 1 ]; then
+        # use dev-requirements.txt
+        install_cmd=$(printf " %s -r dev-requirements.txt" $install_cmd)
     else
+        # use requirements.txt
         install_cmd=$(printf "%s -r requirements.txt" $install_cmd)
     fi
 
-    echo $install_cmd
-#    eval $install_cmd
+    eval $install_cmd
+    unset IFS
 }
 
 install_dependencies
