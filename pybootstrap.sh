@@ -1,12 +1,5 @@
 #!/usr/bin/env sh
 
-# Run virtualenv if env/ doesn't exist
-if [ ! -d "./env" ]; then
-    virtualenv env
-else
-    echo "Virtual env already found..."
-fi
-
 # Parse command line arguments
 print_usage() {
 	cat <<_EOF_
@@ -18,6 +11,7 @@ Optionally source this script to activate virtual env in your shell.
     -d             use dev requirements
     -f             force reinstall of packages
     -h             show help
+    -p             use python version 2 or 3, e.g. "-p 3"
 _EOF_
 }
 
@@ -25,7 +19,8 @@ get_args() {
     local OPTIND
     dash_d=0
     dash_f=0
-    while getopts "dfh" opt; do
+    pyversion=2
+    while getopts "dfhp:" opt; do
       case $opt in
         h)
           print_usage
@@ -37,16 +32,14 @@ get_args() {
         f)
           dash_f=1
           ;;
+	p)
+          pyversion=$OPTARG
+          ;;
         \?)
           ;;
       esac
     done
 }
-
-get_args $@
-
-# Activate virtualenv
-. ./env/bin/activate
 
 # Build install command string
 install_dependencies() {
@@ -69,6 +62,30 @@ install_dependencies() {
     eval $install_cmd
     unset IFS
 }
+
+get_args $@
+
+# Make virtualenv for py2
+if [ ! -d "./env" ]; then
+    virtualenv env
+else
+    echo "Virtual env for python 2 already found..."
+fi
+
+# Make virtualenv for py3
+if [ ! -d "./env3" ]; then
+    virtualenv -p /usr/bin/python3 env3
+else
+    echo "Virtual env for python 3 already found..."
+fi
+
+# Activate appropriate virtualenv
+if [ $pyversion -eq 3 ]; then
+    . ./env3/bin/activate
+else
+    . ./env/bin/activate
+fi
+
 
 if [ $dash_d -eq 1 ] && [ -f "dev-requirements.txt" ]; then
     echo "Installing development requirements..."
