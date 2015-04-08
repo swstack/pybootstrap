@@ -3,6 +3,8 @@
 # Run virtualenv if env/ doesn't exist
 if [ ! -d "./env" ]; then
     virtualenv env
+else
+    echo "Virtual env already found..."
 fi
 
 # Parse command line arguments
@@ -52,6 +54,7 @@ install_dependencies() {
     install_cmd="./env/bin/pip install -i http://pypi.digi.com/simple"
     if [ $dash_f -eq 1 ]; then
         # reinstall packages
+	echo "Force reinstalling packages..."
         install_cmd=$(printf "%s --force-reinstall" $install_cmd )
     fi
 
@@ -67,8 +70,13 @@ install_dependencies() {
     unset IFS
 }
 
-if [ -f "requirements.txt" ] || [ -f "dev-requirements.txt" ]; then
+if [ $dash_d -eq 1 ] && [ -f "dev-requirements.txt" ]; then
+    echo "Installing development requirements..."
+    install_dependencies
+elif [ -f "requirements.txt" ]; then
     echo "Installing requirements..."
     install_dependencies
+else
+    echo "No requirements found..."
 fi
 
