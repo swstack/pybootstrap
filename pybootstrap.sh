@@ -44,7 +44,7 @@ get_args() {
 # Build install command string
 install_dependencies() {
     IFS="%"  # Preserve whitespace in variables by changing inter field separator
-    install_cmd="./env/bin/pip install -i http://pypi.digi.com/simple"
+    install_cmd="./env/bin/pip install"
     if [ $dash_f -eq 1 ]; then
         # reinstall packages
 	echo "Force reinstalling packages..."
