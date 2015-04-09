@@ -43,8 +43,10 @@ get_args() {
 
 # Build install command string
 install_dependencies() {
+    arg1_pip_path=$1
     IFS="%"  # Preserve whitespace in variables by changing inter field separator
-    install_cmd="./env/bin/pip install"
+    install_cmd="${arg1_pip_path} install"
+    return
     if [ $dash_f -eq 1 ]; then
         # reinstall packages
 	echo "Force reinstalling packages..."
@@ -82,18 +84,18 @@ fi
 # Activate appropriate virtualenv
 if [ $pyversion -eq 3 ]; then
     . ./env3/bin/activate
+    pip_path="./env3/bin/pip3"
 else
     . ./env/bin/activate
+    pip_path="./env/bin/pip"
 fi
-
 
 if [ $dash_d -eq 1 ] && [ -f "dev-requirements.txt" ]; then
     echo "Installing development requirements..."
-    install_dependencies
+    install_dependencies $pip_path
 elif [ -f "requirements.txt" ]; then
     echo "Installing requirements..."
-    install_dependencies
+    install_dependencies $pip_path
 else
     echo "No requirements found..."
 fi
-
