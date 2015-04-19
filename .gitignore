@@ -1,3 +1,5 @@
 env/
 env3/
 .idea/
+requirements.txt
+dev-requirements.txt
