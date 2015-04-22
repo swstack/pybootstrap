@@ -46,7 +46,6 @@ install_dependencies() {
     arg1_pip_path=$1
     IFS="%"  # Preserve whitespace in variables by changing inter field separator
     install_cmd="${arg1_pip_path} install"
-    return
     if [ $dash_f -eq 1 ]; then
         # reinstall packages
 	echo "Force reinstalling packages..."
