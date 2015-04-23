@@ -24,7 +24,7 @@ get_args() {
       case $opt in
         h)
           print_usage
-          return 0
+          exit
           ;;
         d)
           dash_d=1
