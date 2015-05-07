@@ -1,9 +1,10 @@
 # pybootstrap.sh
 
-Use this script to bootstrap a python project with the following directory structure:
+This script works best with a project that looks like this:
 
 ```
 projectroot/
+    .gitignore
     README.md
     requirements.txt
     dev-requirements.txt
@@ -15,18 +16,21 @@ projectroot/
 Copy this script into the root of your Python project to help get started wtih virtualenv
 and pip very quickly.  The usage is as follows:
 
-```
+```sh
 Usage: $ [source] ./bootstrap.sh [OPTIONS]
 
 Optionally source this script to activate virtual env in your shell.
-
     -d             use dev requirements
     -f             force reinstall of packages
     -h             show help
+    -p             use python version 2 or 3, e.g. "-p 3"
 ```
 
-As you can see from the usage, sourcing this script will activate virtual env in
-your shell, and not just for the duration of the script execution.
+Use `source` to activate virtual env in your shell, for instance:
+
+```
+$ source ./pybootstrap.sh -d
+```
 
 **`requirements.txt` vs `dev-requirements.txt`:**
 
@@ -49,5 +53,7 @@ flask
 sqlalchemy
 ```
 
-Running `./pybootstrap.sh -d` will install **nose**, **mock** and **httpretty** and
-running `./pybootstrap` will install **flask** and **sqlalchemy**.
+Running `source ./pybootstrap.sh` will install **flask** and **sqlalchemy** as defined in "requirements.txt".
+
+Running `source ./pybootstrap.sh -d` will install **nose**, **mock** and **httpretty** as well as
+the dependencies defined in requirements.txt
